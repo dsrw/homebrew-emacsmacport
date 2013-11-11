@@ -12,6 +12,7 @@ class EmacsMac < Formula
 
   option 'with-dbus', 'Build with d-bus support'
   option 'with-xml2', 'Build with libxml2 support'
+  option 'with-default-icon', 'Use Emacs 24 icon'
 
   depends_on 'd-bus' if build.include? 'with-dbus'
   depends_on 'gnutls' => :optional
@@ -54,6 +55,11 @@ class EmacsMac < Formula
             "--enable-mac-app=#{prefix}"]
 
     # build
+    if build.with? 'default-icon'
+      FileUtils.cp 'nextstep/Cocoa/Emacs.base/Contents/Resources/Emacs.icns',
+                   'mac/Emacs.app/Contents/Resources/Emacs.icns'
+    end
+
     system "./configure", *args
     system "make"
     system "make install"
